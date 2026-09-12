@@ -27,9 +27,11 @@ git clone --recurse-submodules https://github.com/ruvnet/RuView.git
 ## Update to latest upstream
 
 ```bash
-git submodule update --remote --merge
-git add vendor/
+git submodule update --remote --recursive
+git add $(git config --file .gitmodules --get-regexp '^submodule\..*\.path$' | awk '{print $2}')
 git commit -m "chore: update vendor submodules"
 ```
 
-A GitHub Actions workflow also checks for updates every 6 hours and opens a PR automatically.
+A GitHub Actions workflow also checks for updates every 6 hours. It reuses the
+`chore/update-submodules` branch and opens or updates a PR automatically when
+repository settings allow GitHub Actions to create pull requests.
